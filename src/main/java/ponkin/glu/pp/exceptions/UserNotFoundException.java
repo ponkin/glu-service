@@ -10,4 +10,7 @@ public class UserNotFoundException extends Exception {
     public UserNotFoundException(String userId){
         super(String.format("User '%s' is not found", userId));
     }
+    public UserNotFoundException(){
+        this(null);
+    }
 }

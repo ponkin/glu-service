@@ -19,6 +19,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Data
 public class Pong {
 
-    private Long pong;
+    private Long count;
 
 }

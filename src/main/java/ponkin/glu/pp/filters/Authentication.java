@@ -14,6 +14,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Assign user generated userId if request
@@ -47,31 +49,32 @@ public class Authentication implements Filter {
         log.debug("Check user identity.");
         HttpServletRequest httpReq = (HttpServletRequest) request;
         HttpServletResponse httpRes = (HttpServletResponse) response;
-        Cookie[] cookies = httpReq.getCookies();
         User user = null;
-        String userId = null;
-        if (cookies != null)
-            for (Cookie cookie : cookies) {
-                if (AUTH_COOKIE_NAME.equals(cookie.getName())) {
-                    userId = cookie.getValue();
-                    break;
-                }
-            }
+        Map<String,String> cookiesMap = populateCookies(httpReq.getCookies());
+        String userId = cookiesMap.get(AUTH_COOKIE_NAME);
         try {
             user = userDAO.findById(userId);
         } catch (UserNotFoundException e) {
-            log.debug("Error while fetching user from DB", e);
+            log.debug("User not found in storage.", e);
             userId = java.util.UUID.randomUUID().toString();
             user = new User(userId);
             userDAO.create(user);
             httpRes.addCookie(new Cookie(AUTH_COOKIE_NAME, userId));
         }
         assert (user != null);
-        // put user in context
+        // put user in application context
         appCtx.get().setUser(user);
         log.debug("Filter success");
         chain.doFilter(request, response);
     }
 
+    protected static Map<String, String> populateCookies(Cookie[] cookies){
+        Map<String, String> result = new HashMap<>();
+        if (cookies != null)
+            for (Cookie cookie : cookies) {
+                result.put(cookie.getName(), cookie.getValue());
+            }
+        return result;
+    }
 
 }

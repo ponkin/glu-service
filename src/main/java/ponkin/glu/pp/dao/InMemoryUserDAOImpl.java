@@ -17,13 +17,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Singleton
 @Slf4j
-public class DummyUserDAOImpl implements UserDAO{
+public class InMemoryUserDAOImpl implements UserDAO{
 
-    private final Map<String, User> db = new ConcurrentHashMap<String, User>();
+    private final Map<String, User> db = new ConcurrentHashMap<>();
 
     @Override
     public User findById(String userId) throws UserNotFoundException {
-        if(userId == null) throw new UserNotFoundException(userId);
+        if(userId == null) throw new UserNotFoundException();
         log.debug("Get user {} from DB", userId);
         User user = db.get(userId);
         if(user == null) throw new UserNotFoundException(userId);

@@ -13,11 +13,20 @@ public interface StatsDAO {
 
     /**
      * Increment method call counter
-     *  @param userId
-     *  @param methodName
-     *  @return new method call counter value
+     *
+     * @param userId users` id
+     * @param methodName method name
      */
-    Long incMethodCall(String userId, String methodName);
+    void incMethodCall(String userId, String methodName);
+
+    /**
+     * Return method call count for user
+     *
+     * @param userId users` id
+     * @param methodName method name
+     * @return method call count for user
+     */
+    Long countMethodCall(String userId, String methodName);
 
 
 }

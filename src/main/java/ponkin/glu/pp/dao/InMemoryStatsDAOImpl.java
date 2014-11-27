@@ -15,25 +15,34 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Singleton
 @Slf4j
-public class DummyStatsDAOImpl implements StatsDAO{
+public class InMemoryStatsDAOImpl implements StatsDAO{
 
-    private final ConcurrentHashMap<String, AtomicLong> stats = new ConcurrentHashMap<String, AtomicLong>();
+    private final ConcurrentHashMap<String, AtomicLong> stats = new ConcurrentHashMap<>();
 
     @Override
-    public Long incMethodCall(String userId, String methodName) {
+    public void incMethodCall(String userId, String methodName) {
         log.debug("Increment method {} call for user {}", methodName, userId);
         String key = constructKey(userId, methodName);
         AtomicLong value = stats.get(key);
         if (value == null) {
             value = stats.putIfAbsent(key, new AtomicLong(1));
-            log.debug("Method {} called {} times", methodName, value);
         }
         if (value != null) {
-            long l = value.incrementAndGet();
-            log.debug("Method {} called {} times", methodName, l);
-            return l;
+            value.incrementAndGet();
+        }
+    }
+
+    @Override
+    public Long countMethodCall(String userId, String methodName) {
+        String key = constructKey(userId, methodName);
+        AtomicLong value = stats.get(key);
+        if (value == null) {
+            value = stats.putIfAbsent(key, new AtomicLong(0));
+        }
+        if (value != null) {
+            return value.get();
         }else{
-            return 1l;
+            return 0l;
         }
     }
 

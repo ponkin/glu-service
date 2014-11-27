@@ -2,27 +2,25 @@ package ponkin.glu.pp.guice;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Singleton;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
-import com.sun.jersey.api.core.PackagesResourceConfig;
-import com.sun.jersey.api.core.ResourceConfig;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import ponkin.glu.pp.ApplicationContext;
 import ponkin.glu.pp.ApplicationContextImpl;
-import ponkin.glu.pp.dao.DummyStatsDAOImpl;
-import ponkin.glu.pp.dao.DummyUserDAOImpl;
+import ponkin.glu.pp.aop.ServiceMethodCountInterceptor;
+import ponkin.glu.pp.aop.Count;
+import ponkin.glu.pp.dao.InMemoryStatsDAOImpl;
+import ponkin.glu.pp.dao.InMemoryUserDAOImpl;
 import ponkin.glu.pp.dao.StatsDAO;
 import ponkin.glu.pp.dao.UserDAO;
 import ponkin.glu.pp.filters.Authentication;
-import ponkin.glu.pp.servlets.GluService;
 import ponkin.glu.pp.servlets.GluServiceImpl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
+ * Service configuration for Guice DI
+ *
  * Created at 26.11.2014.
  *
  * @author Alexey Ponkin
@@ -36,11 +34,14 @@ public class ServiceServletConfig extends GuiceServletContextListener {
 
             @Override
             protected void configureServlets() {
-                bind(StatsDAO.class).to(DummyStatsDAOImpl.class).asEagerSingleton();
-                bind(UserDAO.class).to(DummyUserDAOImpl.class).asEagerSingleton();
+                bind(StatsDAO.class).to(InMemoryStatsDAOImpl.class).asEagerSingleton();
+                bind(UserDAO.class).to(InMemoryUserDAOImpl.class).asEagerSingleton();
                 bind(ApplicationContext.class).to(ApplicationContextImpl.class).in(RequestScoped.class);
+                // register aspect to count method calls
+                ServiceMethodCountInterceptor interceptor = new ServiceMethodCountInterceptor();
+                requestInjection(interceptor);
+                bindInterceptor(Matchers.any(), Matchers.annotatedWith(Count.class), interceptor);
                 // services and filters
-                bind(Authentication.class).asEagerSingleton();
                 bind(GluServiceImpl.class).asEagerSingleton();
                 filter("/*").through(Authentication.class);
                 serve("/*").with(GuiceContainer.class);
