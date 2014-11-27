@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.math.BigDecimal;
 
 /**
  * @author Alexey Ponkin
@@ -16,8 +15,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@Data
 public class Pong {
 
-    private BigDecimal n;
+    private Long pong;
 
 }
