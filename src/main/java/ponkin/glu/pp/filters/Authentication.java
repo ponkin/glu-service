@@ -1,5 +1,6 @@
 package ponkin.glu.pp.filters;
 
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import ponkin.glu.pp.ApplicationContext;
 import ponkin.glu.pp.dao.UserDAO;
@@ -14,7 +15,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -72,7 +72,7 @@ public class Authentication implements Filter {
     }
 
     protected static Map<String, String> populateCookies(Cookie[] cookies) {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = Maps.newHashMap();
         if (cookies != null)
             for (Cookie cookie : cookies) {
                 result.put(cookie.getName(), cookie.getValue());
