@@ -41,7 +41,7 @@ public class GluServiceImpl implements GluService {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Count
-    public Pong handler(Ping request) {
+    public Pong handler(Ping request) throws Exception{
         User auth = appCtx.get().getUser();
         log.debug("Ping method call for user {}", auth);
         return new Pong(statsDAO.countMethodCall(auth.getId(), "handler"));

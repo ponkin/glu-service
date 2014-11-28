@@ -22,6 +22,10 @@ dependencies {
             [group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'],
             [group: 'com.sun.jersey', name:'jersey-json', version:'1.18.2'],
             [group: 'com.google.inject', name: 'guice', version: '3.0'],
+            [group: 'redis.clients', name: 'jedis', version: '2.4.2'],
+            [group: 'com.google.guava', name: 'guava', version: '18.0'],
+            [group: 'org.apache.commons', name: 'commons-pool2', version: '2.0'],
+            [group: 'com.typesafe', name: 'config', version: '1.2.1'],
             [group: 'com.google.inject.extensions', name: 'guice-servlet', version: '3.0']
     )
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'

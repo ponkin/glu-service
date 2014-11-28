@@ -3,7 +3,7 @@ package ponkin.glu.pp.filters;
 import lombok.extern.slf4j.Slf4j;
 import ponkin.glu.pp.ApplicationContext;
 import ponkin.glu.pp.dao.UserDAO;
-import ponkin.glu.pp.exceptions.UserNotFoundException;
+import ponkin.glu.pp.exceptions.UserAlreadyExistsException;
 import ponkin.glu.pp.model.User;
 
 import javax.inject.Inject;
@@ -49,26 +49,29 @@ public class Authentication implements Filter {
         log.debug("Check user identity.");
         HttpServletRequest httpReq = (HttpServletRequest) request;
         HttpServletResponse httpRes = (HttpServletResponse) response;
-        User user = null;
-        Map<String,String> cookiesMap = populateCookies(httpReq.getCookies());
+        Map<String, String> cookiesMap = populateCookies(httpReq.getCookies());
         String userId = cookiesMap.get(AUTH_COOKIE_NAME);
-        try {
-            user = userDAO.findById(userId);
-        } catch (UserNotFoundException e) {
-            log.debug("User not found in storage.", e);
+
+        User user = userDAO.findById(userId);
+        if (user == null) {
+
             userId = java.util.UUID.randomUUID().toString();
             user = new User(userId);
-            userDAO.create(user);
-            httpRes.addCookie(new Cookie(AUTH_COOKIE_NAME, userId));
+            try {
+                userDAO.create(user);
+                httpRes.addCookie(new Cookie(AUTH_COOKIE_NAME, userId));
+            } catch (UserAlreadyExistsException e) {
+                log.error("Id is already in use");
+                httpRes.sendError(503, "Service Unavailable");
+            }
+
         }
-        assert (user != null);
         // put user in application context
         appCtx.get().setUser(user);
-        log.debug("Filter success");
         chain.doFilter(request, response);
     }
 
-    protected static Map<String, String> populateCookies(Cookie[] cookies){
+    protected static Map<String, String> populateCookies(Cookie[] cookies) {
         Map<String, String> result = new HashMap<>();
         if (cookies != null)
             for (Cookie cookie : cookies) {

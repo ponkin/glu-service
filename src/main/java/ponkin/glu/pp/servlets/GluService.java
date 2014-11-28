@@ -11,10 +11,5 @@ import ponkin.glu.pp.model.Pong;
  */
 public interface GluService {
 
-    /**
-     * List of all service methods for stat counters
-     */
-    public static final String PING_METHOD = "PING";
-
-    Pong handler(Ping request);
+    Pong handler(Ping request) throws Exception;
 }

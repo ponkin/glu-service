@@ -1,9 +1,10 @@
 package ponkin.glu.pp.dao;
 
+import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public class InMemoryStatsDAOImpl implements StatsDAO{
 
-    private final ConcurrentHashMap<String, AtomicLong> stats = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, AtomicLong> stats = Maps.newConcurrentMap();
 
     @Override
     public void incMethodCall(String userId, String methodName) {

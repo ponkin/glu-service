@@ -17,7 +17,7 @@ public interface StatsDAO {
      * @param userId users` id
      * @param methodName method name
      */
-    void incMethodCall(String userId, String methodName);
+    void incMethodCall(String userId, String methodName) throws Exception;
 
     /**
      * Return method call count for user
@@ -26,7 +26,7 @@ public interface StatsDAO {
      * @param methodName method name
      * @return method call count for user
      */
-    Long countMethodCall(String userId, String methodName);
+    Long countMethodCall(String userId, String methodName) throws Exception;
 
 
 }

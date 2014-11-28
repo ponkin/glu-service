@@ -1,12 +1,11 @@
 package ponkin.glu.pp.dao;
 
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import ponkin.glu.pp.exceptions.UserNotFoundException;
 import ponkin.glu.pp.model.User;
 
 import javax.inject.Singleton;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * In-Memory user storage implementation
@@ -19,15 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class InMemoryUserDAOImpl implements UserDAO{
 
-    private final Map<String, User> db = new ConcurrentHashMap<>();
+    private final Map<String, User> db = Maps.newConcurrentMap();
 
     @Override
-    public User findById(String userId) throws UserNotFoundException {
-        if(userId == null) throw new UserNotFoundException();
+    public User findById(String userId) {
         log.debug("Get user {} from DB", userId);
-        User user = db.get(userId);
-        if(user == null) throw new UserNotFoundException(userId);
-        return user;
+        if(userId == null) return null;
+        return db.get(userId);
     }
 
     @Override

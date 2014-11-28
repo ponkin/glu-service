@@ -1,6 +1,6 @@
 package ponkin.glu.pp.dao;
 
-import ponkin.glu.pp.exceptions.UserNotFoundException;
+import ponkin.glu.pp.exceptions.UserAlreadyExistsException;
 import ponkin.glu.pp.model.User;
 
 /**
@@ -11,8 +11,8 @@ import ponkin.glu.pp.model.User;
  */
 public interface UserDAO {
 
-    User findById(String userId) throws UserNotFoundException;
+    User findById(String userId);
 
-    void create(User user);
+    void create(User user) throws UserAlreadyExistsException;
 
 }
