@@ -3,6 +3,9 @@ package ponkin.glu.pp.dao;
 import ponkin.glu.pp.exceptions.UserAlreadyExistsException;
 import ponkin.glu.pp.model.User;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Created at 27.11.2014.
  *
@@ -11,8 +14,8 @@ import ponkin.glu.pp.model.User;
  */
 public interface UserDAO {
 
-    User findById(String userId);
+    User findById(@Nullable String userId);
 
-    void create(User user) throws UserAlreadyExistsException;
+    void create(@Nonnull User user) throws UserAlreadyExistsException;
 
 }

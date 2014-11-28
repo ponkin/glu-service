@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import ponkin.glu.pp.model.User;
 
+import javax.annotation.Nonnull;
 import javax.inject.Singleton;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class InMemoryUserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void create(User user) {
+    public void create(@Nonnull User user) {
         log.debug("Save {} to DB", user);
         db.put(user.getId(), user);
     }

@@ -6,6 +6,8 @@ import ponkin.glu.pp.model.User;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -23,7 +25,7 @@ public class RedisUserDAOImpl implements UserDAO{
     private JedisPool pool;
 
     @Override
-    public User findById(String userId) {
+    public User findById(@Nullable String userId) {
         if(userId == null) return null;
         Boolean doesUserExist = Boolean.FALSE;
         Jedis jedis = pool.getResource();
@@ -39,7 +41,7 @@ public class RedisUserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void create(User user) throws UserAlreadyExistsException {
+    public void create(@Nonnull User user) throws UserAlreadyExistsException {
         Long result = null;
         Jedis jedis = pool.getResource();
         try{
