@@ -12,6 +12,8 @@ Host: localhost:8080
 Content-Type: application/json
 Accept: application/json
 Content-Length: 11
+
+{"ping":{}}
 ```
 
 You wil receive something like that
@@ -22,17 +24,47 @@ Set-Cookie: USER_ID=40ab2e72-36e5-4273-b29a-d2439a027e27
 Content-Type: application/json
 Transfer-Encoding: chunked
 Server: Jetty(6.1.25)
-{"count":"54"}%  
+
+{"count":"54"}
 ```
 
-Remember the `USER_ID=40ab2e72-36e5-4273-b29a-d2439a027e27` to append to all your next requests.
+Remember the `USER_ID=40ab2e72-36e5-4273-b29a-d2439a027e27` to append to all your next requests,
+for example:
+
+```
+POST /glu-service/handler HTTP/1.1
+User-Agent: curl/7.30.0
+Host: localhost:8080
+Accept: */*
+Cookie: USER_ID=40ab2e72-36e5-4273-b29a-d2439a027e27
+Content-Type: application/json
+Content-Length: 11
+
+{"ping":{}}
+```
 If you change `Accept` to `application/xml` you will receive xml as a result
+
+You can send xml request, just change header `Content-Type` to `application/xml` and `ping` will be
+
+```
+POST /glu-service/handler HTTP/1.1
+User-Agent: curl/7.30.0
+Host: localhost:8080
+Accept: */*
+Cookie: USER_ID=40ab2e72-36e5-4273-b29a-d2439a027e27
+Content-Type: application/xml
+Content-Length: 13
+
+<ping></ping>
+```
 
 
 ## Build
 Run `./gradlew`(NIX) or `gradlew.bat`(Windows) from project root.
 No gradle installation required.
 To package service in  `war` simply run `./gradlew war`
+To run service as stand-alone application, print `./gradlew jettyRun` - this command will launch embedded
+jetty server on localhost port 8080, endpoint will be `http://localhost:8080/glu-service/handler`.
 
 ## API
 
