@@ -17,9 +17,6 @@ import ponkin.glu.pp.aop.ServiceMethodCountInterceptor;
 import ponkin.glu.pp.aop.Count;
 import ponkin.glu.pp.filters.Authentication;
 import ponkin.glu.pp.servlets.GluServiceImpl;
-import redis.clients.jedis.JedisPool;
-
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
@@ -51,13 +48,6 @@ public class ServiceServletConfig extends GuiceServletContextListener {
                 bind(GluServiceImpl.class).asEagerSingleton();
                 filter("/*").through(Authentication.class);
                 serve("/*").with(GuiceContainer.class);
-            }
-
-            @Provides
-            @Singleton
-            @Inject
-            JedisPool jedisPool(Config conf){
-                return new JedisPool( conf.getString("redis.host"), conf.getInt("redis.port") );
             }
 
             @Provides
