@@ -2,7 +2,6 @@ apply plugin: 'jetty'
 
 sourceCompatibility = 1.7
 version = '1.0'
-stopPort = 8888
 
 repositories {
     mavenCentral()

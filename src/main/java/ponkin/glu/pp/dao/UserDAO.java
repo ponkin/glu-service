@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  */
 public interface UserDAO {
 
-    User findById(@Nullable String userId);
+    @Nullable User findById(@Nullable String userId);
 
     void create(@Nonnull User user) throws UserAlreadyExistsException;
 

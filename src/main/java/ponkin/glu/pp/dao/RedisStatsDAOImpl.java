@@ -43,7 +43,7 @@ public class RedisStatsDAOImpl implements StatsDAO {
         try {
             result = Long.parseLong(jedis.get(key));
         }catch(Exception err){
-            log.error("Error while getting counter in Redis", err);
+            log.error("Error while getting counter from Redis", err);
             throw err;
         }finally {
             pool.returnResource(jedis);
